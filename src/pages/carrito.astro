@@ -1,0 +1,132 @@
+
+---
+import Layout from "../layouts/Layout.astro";
+import "../styles/global.css";
+import  '../styles/movil.css';
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrito - WTF PETS?</title>
+  </head>
+<body>
+
+    <Layout>
+  <header>
+    <div class="header-container">
+      <a href="../pages/index.astro" class="logo">WTF PETS<span>?</span></a>
+      <nav class="nav-links">
+        <a href="../pages/catalogo.astro">Catálogo</a>
+      </nav>
+      <div class="actions">
+        <button id="auth-btn" class="btn-auth">👤 Ingresar</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <h1>Tu Carrito</h1>
+    <div id="cart-content" class="cart-layout">
+    </div>
+  </main>
+
+  <!-- MODAL DE PAGO -->
+  <div id="checkout-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <button id="close-checkout-btn" class="close-btn">✕</button>
+      <h2 style="font-size: 1.5rem; font-weight: 900; margin-bottom: 24px; color: #18181b;">Detalles de Envío y Pago</h2>
+      
+      <form id="form-checkout">
+        <div class="form-group">
+          <label>Dirección de Envío</label>
+          <input type="text" id="chk-direccion" required placeholder="Av. Principal 123">
+        </div>
+        <div class="form-group">
+          <label>Distrito</label>
+          <input type="text" id="chk-distrito" required placeholder="Ej. Miraflores">
+        </div>
+        
+        <div class="form-group" style="margin-top: 24px;">
+          <label>Método de Pago</label>
+          <select id="chk-metodo" style="width: 100%; padding: 10px 14px; border-radius: 12px; border: 1px solid #d4d4d8; font-size: 0.875rem; outline: none; background: white;">
+            <option value="Tarjeta">💳 Tarjeta de Crédito / Débito</option>
+            <option value="Yape">📱 Yape / Plin</option>
+            <option value="Efectivo">💵 Pago en Efectivo (Contra entrega)</option>
+          </select>
+        </div>
+
+        <div id="payment-tarjeta" style="background: #f4f4f5; padding: 16px; border-radius: 12px; margin-bottom: 16px;">
+          <input type="text" placeholder="Número de Tarjeta" style="width: 100%; padding: 10px; margin-bottom: 8px; border-radius: 8px; border: 1px solid #d4d4d8;" required id="tarjeta-num">
+          <div style="display: flex; gap: 8px;">
+            <input type="text" placeholder="MM/AA" style="width: 50%; padding: 10px; border-radius: 8px; border: 1px solid #d4d4d8;" required id="tarjeta-fecha">
+            <input type="text" placeholder="CVV" style="width: 50%; padding: 10px; border-radius: 8px; border: 1px solid #d4d4d8;" required id="tarjeta-cvv">
+          </div>
+        </div>
+
+        <div id="payment-yape" class="hidden" style="background: #f4f4f5; padding: 16px; border-radius: 12px; margin-bottom: 16px; text-align: center;">
+          <p style="font-weight: 700; font-size: 0.875rem;">Escanea para pagar</p>
+            <img src="../assets/qr-yape.png" style="width: 100px; height: 100px; margin: 8px 0;" alt="QR Yape">          <p style="font-size: 0.75rem; color: #52525b;">Número: 944 871 602</p>
+        </div>
+
+        <button type="submit" class="btn-submit" id="btn-finalizar-compra">Confirmar Pago</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL DE LOGIN / REGISTRO -->
+  <div id="auth-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <button id="close-modal-btn" class="close-btn">✕</button>
+
+      <div class="tabs">
+        <button id="tab-login" type="button" class="tab-btn tab-active">Iniciar Sesión</button>
+        <button id="tab-register" type="button" class="tab-btn tab-inactive">Registrarse</button>
+      </div>
+
+      <form id="form-login">
+        <div class="form-group">
+          <label>Correo Electrónico</label>
+          <input type="email" id="login-email" required placeholder="humano@gmail.com">
+        </div>
+        <div class="form-group">
+          <label>Contraseña</label>
+          <div class="password-wrapper">
+            <input type="password" id="login-password" required placeholder="••••••••" class="input-pass">
+            <button type="button" class="btn-show-pass" data-target="login-password">Ver</button>
+          </div>
+        </div>
+        <button type="submit" class="btn-submit">Entrar a WTF PETS?</button>
+      </form>
+
+      <form id="form-register" class="hidden">
+        <div class="form-group">
+          <label>Tu Nombre</label>
+          <input type="text" id="reg-name" required placeholder="Ej. Carlos">
+        </div>
+        <div class="form-group">
+          <label>Nombre de tu Mascota 🐶🐱🦜</label>
+          <input type="text" id="reg-pet" required placeholder="Ej. Chester / Michi">
+        </div>
+        <div class="form-group">
+          <label>Correo Electrónico</label>
+          <input type="email" id="reg-email" required placeholder="humano@gmail.com">
+        </div>
+        <div class="form-group">
+          <label>Contraseña</label>
+          <div class="password-wrapper">
+            <input type="password" id="reg-password" required placeholder="••••••••" class="input-pass">
+            <button type="button" class="btn-show-pass" data-target="reg-password">Ver</button>
+          </div>
+        </div>
+        <button type="submit" class="btn-submit btn-submit-reg">Crear Cuenta Perruna</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/public/js/productos.js"></script>
+    </Layout>
+</body>
+</html>

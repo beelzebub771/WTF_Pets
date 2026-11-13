@@ -1,0 +1,117 @@
+
+---
+import Layout from '../layouts/Layout.astro';
+import "../styles/home.css";
+import "../styles/global.css";
+---
+
+<Layout>
+	<script is:inline src="/js/productos.js"></script>
+  <header>
+    <div class="header-container">
+      <div style="display: flex; align-items: center; gap: 32px;">
+        <a href="Index.html" class="logo">WTF PETS<span>?</span></a>
+        <nav class="nav-links">
+          <a href="#catalogo">Catálogo</a>
+          <a href="#manifiesto">Manifiesto</a>
+        </nav>
+      </div>
+      <div class="actions">
+        <button id="auth-btn" class="btn-auth">👤 Ingresar</button>
+        <button id="cart-btn" class="btn-cart">
+          <span>🛒 Carrito</span>
+          <span id="cart-count" class="badge-cart">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="catalogo">
+    <div class="hero-title">
+      <div>
+        <span class="tagline">Accesorios y Moda Loco</span>
+        <h2 class="main-heading">El Caos Multiespecie 🐶🐱🦜</h2>
+      </div>
+      <p class="subtext">Pasa el cursor sobre un producto para revelar las fotos de los clientes.</p>
+    </div>
+
+    <div class="filter-bar">
+      <div style="display: flex; gap: 8px;" id="filters-container">
+        <button class="filter-btn active" data-filter="todos">Todos</button>
+        <button class="filter-btn" data-filter="perro">🐶 Perros</button>
+        <button class="filter-btn" data-filter="gato">🐱 Gatos</button>
+        <button class="filter-btn" data-filter="ave">🦜 Aves</button>
+      </div>
+      <input type="text" id="search-input" class="search-input" placeholder="🔍 Buscar accesorio...">
+    </div>
+
+    <div id="products-grid" class="grid-container"></div>
+  </main>
+
+  <div id="auth-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <button id="close-modal-btn" class="close-btn">✕</button>
+
+      <div class="tabs">
+        <button id="tab-login" type="button" class="tab-btn tab-active">Iniciar Sesión</button>
+        <button id="tab-register" type="button" class="tab-btn tab-inactive">Registrarse</button>
+      </div>
+
+      <form id="form-login">
+        <div class="form-group">
+          <label>Correo Electrónico</label>
+          <input type="email" id="login-email" required placeholder="humano@gmail.com">
+        </div>
+        <div class="form-group">
+          <label>Contraseña</label>
+          <div class="password-wrapper">
+            <input type="password" id="login-password" required placeholder="••••••••" class="input-pass">
+            <button type="button" class="btn-show-pass" data-target="login-password">Ver</button>
+          </div>
+        </div>
+        <button type="submit" class="btn-submit">Entrar a WTF PETS?</button>
+      </form>
+
+      <form id="form-register" class="hidden">
+        <div class="form-group">
+          <label>Tu Nombre</label>
+          <input type="text" id="reg-name" required placeholder="Ej. Carlos">
+        </div>
+        <div class="form-group">
+          <label>Nombre de tu Mascota 🐶🐱🦜</label>
+          <input type="text" id="reg-pet" required placeholder="Ej. Chester / Michi">
+        </div>
+        <div class="form-group">
+          <label>Correo Electrónico</label>
+          <input type="email" id="reg-email" required placeholder="humano@gmail.com">
+        </div>
+        <div class="form-group">
+          <label>Contraseña</label>
+          <div class="password-wrapper">
+            <input type="password" id="reg-password" required placeholder="••••••••" class="input-pass">
+            <button type="button" class="btn-show-pass" data-target="reg-password">Ver</button>
+          </div>
+        </div>
+        <button type="submit" class="btn-submit btn-submit-reg">Crear Cuenta Perruna</button>
+      </form>
+    </div>
+  </div>
+
+  <footer style="background: #18181b; color: white; padding: 40px 24px; margin-top: auto;">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; align-items: center; border-bottom: 1px solid #27272a; padding-bottom: 24px;">
+      <div>
+        <h3 style="font-size: 1.5rem; font-weight: 900; color: white;">WTF PETS<span style="color: #4f46e5;">?</span></h3>
+        <p style="color: #a1a1aa; font-size: 0.875rem; margin-top: 4px;">0% Vergüenza • 100% Estilo para tus mascotas.</p>
+      </div>
+      <div style="display: flex; gap: 20px;">
+        <a href="#catalogo" style="color: #a1a1aa; text-decoration: none; font-size: 0.875rem; font-weight: 600;">Catálogo</a>
+        <a href="#manifiesto" style="color: #a1a1aa; text-decoration: none; font-size: 0.875rem; font-weight: 600;">Manifiesto</a>
+      </div>
+    </div>
+    <div style="max-width: 1200px; margin: 24px auto 0; text-align: center; color: #71717a; font-size: 0.75rem;">
+      &copy; 2026 WTF PETS?. Todos los derechos reservados.
+    </div>
+  </footer>
+
+  <script src="/public/js/productos.js"></script>
+</Layout>
