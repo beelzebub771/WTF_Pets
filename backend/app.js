@@ -15,14 +15,14 @@ const db = createClient({
   authToken: process.env.TURSO_AUTH_TOKEN
 });
 
-// Obtener todos los productos desde libSQL / Turso
+// Obtener todos los productos
 app.get('/api/productos', async (req, res) => {
   try {
     const result = await db.execute(`
-      SELECT 
+      SELECT
         p.id_producto AS id,
         p.nombre_producto AS nombre,
-        'perro' AS especie, 
+        LOWER(TRIM(e.nombre_especie)) AS especie,
         c.nombre_categoria AS categoria,
         p.precio_base AS precio,
         p.descripcion AS descripcion,
@@ -30,38 +30,59 @@ app.get('/api/productos', async (req, res) => {
         'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=200&q=80' AS clienteFoto1,
         'https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?auto=format&fit=crop&w=200&q=80' AS clienteFoto2
       FROM PRODUCTO p
-      INNER JOIN CATEGORIA c ON p.id_categoria = c.id_categoria
+      INNER JOIN CATEGORIA c
+        ON p.id_categoria = c.id_categoria
+      LEFT JOIN ESPECIE e
+        ON p.id_especie = e.id_especie
     `);
+
     res.json(result.rows);
+
   } catch (error) {
     console.error("Error en GET /api/productos:", error.message);
     res.status(500).json({ error: error.message });
   }
 });
 
-// Buscar productos por especie
+// Buscar productos según la especie
 app.get('/api/productos/buscar', async (req, res) => {
   try {
-    const result = await db.execute(`
-      SELECT 
-        p.id_producto AS id,
-        p.nombre_producto AS nombre,
-        'perro' AS especie, 
-        c.nombre_categoria AS categoria,
-        p.precio_base AS precio,
-        p.descripcion AS descripcion,
-        p.imagen_url AS imagenPrincipal,
-        'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=200&q=80' AS clienteFoto1,
-        'https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?auto=format&fit=crop&w=200&q=80' AS clienteFoto2
-      FROM PRODUCTO p
-      INNER JOIN CATEGORIA c ON p.id_categoria = c.id_categoria
-    `);
-    
-    const { especie } = req.query;
-    let filtrados = result.rows;
-    if (especie && especie !== 'perro') filtrados = [];
-    res.json(filtrados);
+    const especie = String(req.query.especie || '')
+      .trim()
+      .toLowerCase();
+
+    if (!['perro', 'gato', 'ave'].includes(especie)) {
+      return res.status(400).json({
+        error: 'Especie no válida'
+      });
+    }
+
+    const result = await db.execute({
+      sql: `
+        SELECT
+          p.id_producto AS id,
+          p.nombre_producto AS nombre,
+          LOWER(TRIM(e.nombre_especie)) AS especie,
+          c.nombre_categoria AS categoria,
+          p.precio_base AS precio,
+          p.descripcion AS descripcion,
+          p.imagen_url AS imagenPrincipal,
+          'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=200&q=80' AS clienteFoto1,
+          'https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?auto=format&fit=crop&w=200&q=80' AS clienteFoto2
+        FROM PRODUCTO p
+        INNER JOIN CATEGORIA c
+          ON p.id_categoria = c.id_categoria
+        INNER JOIN ESPECIE e
+          ON p.id_especie = e.id_especie
+        WHERE LOWER(TRIM(e.nombre_especie)) = ?
+      `,
+      args: [especie]
+    });
+
+    res.json(result.rows);
+
   } catch (error) {
+    console.error("Error al buscar productos:", error.message);
     res.status(500).json({ error: error.message });
   }
 });
